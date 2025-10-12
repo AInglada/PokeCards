@@ -9,7 +9,7 @@ def home_view(request):
     Simple home view for the catalog app
     """
     # Get banners
-    banners = Banner.objects.filter(active=True)[:5]
+    ## banners = Banner.objects.filter(active=True)[:5]
     
     # Get random cards
     all_cards = list(Card.objects.all()[:100])

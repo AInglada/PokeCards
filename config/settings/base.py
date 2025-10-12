@@ -47,14 +47,9 @@ INSTALLED_APPS = [
     'apps.profiles.apps.ProfilesConfig', 
     'apps.legalapp.apps.LegalappConfig', 
     
-    # OLD - Comment out or remove
-    # 'store',
-    
-    # NEW - Add this
     'apps.catalog.apps.CatalogConfig',
     'apps.pagesapp.apps.PagesappConfig',
 
-    # Third-party apps
     'rest_framework',
 ]
 

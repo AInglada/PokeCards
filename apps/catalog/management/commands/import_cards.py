@@ -13,7 +13,7 @@ from requests.exceptions import RequestException, HTTPError
 
 from django.core.management.base import BaseCommand, CommandError
 
-from store.models import Generation, CardSet, Card, Language
+from apps.catalog.models import Generation, CardSet, Card, Language
 
 API_BASE = "https://api.pokemontcg.io/v2"
 API_KEY = os.environ.get("POKEMON_TCG_API_KEY")
@@ -59,6 +59,7 @@ class Command(BaseCommand):
         parser.add_argument("--timeout", type=float, default=30.0, help="HTTP timeout seconds")
         parser.add_argument("--max-retries", type=int, default=3, help="Max retries per request")
 
+
     def handle(self, *args, **options):
         if not (options.get("from_api") or options.get("from-api")):
             raise CommandError("Use --from-api to import from the API")
@@ -70,7 +71,7 @@ class Command(BaseCommand):
 
         # Ensure languages exist (catalog import doesn't create Inventory)
         for code, name in [("en", "English"), ("es", "Español"), ("jp", "Japanese")]:
-            from store.models import Language  # local import to avoid startup ordering issues
+            from apps.catalog.models import Language  # local import to avoid startup ordering issues
             Language.objects.get_or_create(code=code, defaults={"name": name})
 
         self.stdout.write(self.style.NOTICE("Starting import from PokemonTCG.io"))
@@ -78,6 +79,7 @@ class Command(BaseCommand):
             self.import_from_api(set_id=set_id, page_size=page_size, timeout=timeout, max_retries=max_retries)
         except Exception as e:
             raise CommandError(f"Import failed: {e}")
+
 
     def import_from_api(self, set_id: Optional[str], page_size: int, timeout: float, max_retries: int):
         self.stdout.write("Fetching sets list...")
@@ -151,6 +153,13 @@ class Command(BaseCommand):
                 params = {"q": f"set.id:{set_code}", "page": page, "pageSize": page_size}
                 try:
                     data = _http_get(f"{API_BASE}/cards", params=params, max_retries=max_retries, timeout=timeout)
+                except HTTPError as e:
+                    if e.response.status_code == 404:
+                        # No more pages to fetch
+                        break
+                    else:
+                        self.stdout.write(self.style.ERROR(f"Failed fetching cards page {page} for set {set_code}: {e}"))
+                        break
                 except Exception as e:
                     self.stdout.write(self.style.ERROR(f"Failed fetching cards page {page} for set {set_code}: {e}"))
                     break
