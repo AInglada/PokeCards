@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}PokeCards - Inicio{% endblock %}
+
+{% block content %}
+<div class="container">
+  {% include "_carousel.html" %}
+  
+  <section class="mb-5">
+    <h2 class="h5 fw-bold mb-3">Descubre cartas</h2>
+    <div class="row g-3">
+      {% for card in random_cards %}
+      <div class="col-6 col-md-4 col-lg-3">
+        {% include "catalog/_card_item.html" %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock %}

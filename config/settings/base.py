@@ -11,12 +11,17 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import environ
 import os
+import sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Three .parent calls: base.py -> settings -> config -> project root
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+# Add apps directory to Python path
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -39,16 +44,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'store',
+    'apps.profiles.apps.ProfilesConfig', 
+    'apps.legalapp.apps.LegalappConfig', 
+    
+    # OLD - Comment out or remove
+    # 'store',
+    
+    # NEW - Add this
+    'apps.catalog.apps.CatalogConfig',
+    'apps.pagesapp.apps.PagesappConfig',
+
+    # Third-party apps
     'rest_framework',
-
-
-    # Local apps
-    'apps.catalog',
-    'apps.banners',  
 ]
 
-AUTH_USER_MODEL = 'store.User'
+# Use custom User model from catalog app
+AUTH_USER_MODEL = 'catalog.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -65,10 +76,11 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',

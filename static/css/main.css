@@ -1,0 +1,19 @@
+/* Global styles */
+body {
+  scroll-padding-top: 80px;
+}
+
+.navbar-brand img {
+  margin-right: 0.5rem;
+}
+
+.card img {
+  object-fit: cover;
+  aspect-ratio: 3/4;
+}
+
+.carousel-caption {
+  background: rgba(0,0,0,0.5);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}

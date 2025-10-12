@@ -1,0 +1,23 @@
+<div id="homeCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+  <div class="carousel-inner rounded shadow-sm">
+    {% for banner in banners %}
+    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+      <img src="{{ banner.image_url }}" class="d-block w-100" alt="{{ banner.title }}">
+      <div class="carousel-caption">
+        <h5>{{ banner.title }}</h5>
+        <p>{{ banner.subtitle }}</p>
+      </div>
+    </div>
+    {% empty %}
+    <div class="carousel-item active">
+      <img src="{% static 'img/banners/placeholder.jpg' %}" class="d-block w-100" alt="Banner">
+    </div>
+    {% endfor %}
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>

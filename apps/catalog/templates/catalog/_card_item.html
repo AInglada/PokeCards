@@ -1,0 +1,13 @@
+<article class="card h-100 shadow-sm">
+  <a href="{{ card.get_absolute_url }}" class="text-decoration-none text-dark">
+    <img src="{{ card.image_url|default:default_image_url }}" class="card-img-top" alt="{{ card.name }}">
+    <div class="card-body">
+      <h6 class="card-title text-truncate">{{ card.name }}</h6>
+      {% if card.in_stock %}
+        <p class="mb-0 fw-semibold text-success">{{ card.price|floatformat:2 }} €</p>
+      {% else %}
+        <p class="mb-0 fw-semibold text-danger">Sin stock</p>
+      {% endif %}
+    </div>
+  </a>
+</article>
