@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'store',
     'rest_framework',
 
-
     # Local apps
     'apps.catalog',
     'apps.banners',  

@@ -1,6 +1,6 @@
 <article class="card h-100 shadow-sm">
   <a href="{{ card.get_absolute_url }}" class="text-decoration-none text-dark">
-    <img src="{{ card.image_url|default:default_image_url }}" class="card-img-top" alt="{{ card.name }}">
+    <img src="{{ card.image_url_small|default:default_image_url }}" class="card-img-top" alt="{{ card.name }}">
     <div class="card-body">
       <h6 class="card-title text-truncate">{{ card.name }}</h6>
       {% if card.in_stock %}
@@ -10,4 +10,4 @@
       {% endif %}
     </div>
   </a>
-</article>
+</article> 
